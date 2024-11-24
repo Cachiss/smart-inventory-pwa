@@ -1,6 +1,5 @@
 'use client'
-
-import { sendNotification } from 'app/actions'
+import { usePushNotifications } from 'hooks/usePushNotificiations'
 import React, { useState } from 'react'
 
 export default function CreateProductCard() {
@@ -11,6 +10,7 @@ export default function CreateProductCard() {
   const [stock, setStock] = useState('')
   const [availableAt, setAvailableAt] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const {sendNotification} = usePushNotifications()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

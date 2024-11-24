@@ -41,7 +41,7 @@ export default function DashboardLayout({
 }) {
   return (
     <Providers>
-      <PushNotificationManager />
+      <PushNotificationManager>
       <InstallPromptIos />
       <main className="flex min-h-screen w-full flex-col bg-muted/40">
         <DesktopNav />
@@ -58,6 +58,7 @@ export default function DashboardLayout({
         </div>
         <Analytics />
       </main>
+      </PushNotificationManager>
     </Providers>
   );
 }

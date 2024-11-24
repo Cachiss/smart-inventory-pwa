@@ -24,18 +24,17 @@ export async function unsubscribeUser() {
   return { success: true };
 }
  
-export async function sendNotification(message : any, title = 'Test Notification') {
+export async function sendNotification(message : any, title = 'Test Notification', sub : any) {
   message = typeof message === 'string' ? message : 'Test Notification';
   try {
     await webpush.sendNotification(
-      subscription,
+      sub,
       JSON.stringify({
         title: title,
         body: message,
         icon: '/icon.png',
       })
     );
-    alert('Notification sent');
     return { success: true };
   } catch (error) {
     console.error('Error sending push notification:', error);

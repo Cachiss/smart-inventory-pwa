@@ -1,7 +1,13 @@
 'use client'
  
-import { useState, useEffect } from 'react'
-import { subscribeUser, unsubscribeUser, sendNotification } from '../../app/actions'
+import { useState, useEffect, createContext } from 'react'
+import { subscribeUser, unsubscribeUser, sendNotification as sendNoti } from '../../app/actions'
+
+export const PushNotificationContext = createContext<{
+  sendNotification: (message: string, title: string) => Promise<void>,
+}>({
+  sendNotification: () => Promise.resolve(),
+})
  
 function urlBase64ToUint8Array(base64String: string) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
@@ -30,17 +36,26 @@ const ServiceWorkerRegister = () => {
   return null;
 };
 
-function PushNotificationManager() {
+function PushNotificationManager({children}: {children: React.ReactNode}) {
     const [isSupported, setIsSupported] = useState(false)
     const [subscription, setSubscription] = useState<PushSubscription | null>(
       null
     )
     const [message, setMessage] = useState('')
+    const [loading, setLoading] = useState(true)
    
     useEffect(() => {
       if ('serviceWorker' in navigator && 'PushManager' in window) {
-        setIsSupported(true)
-        registerServiceWorker()
+        (async () => {
+          setIsSupported(true);
+          await registerServiceWorker();
+          setLoading(false);
+        })()
+      }else{
+        (async () => {
+          await subscribeToPush(); 
+          setLoading(false);
+        })()
       }
     }, [])
    
@@ -71,40 +86,23 @@ function PushNotificationManager() {
       await unsubscribeUser()
     }
    
-    async function sendTestNotification() {
+    async function sendNotification(message: string, title:string) {
       if (subscription) {
-        await sendNotification(message)
+        await sendNoti(message,title, subscription)
         setMessage('')
       }
     }
    
-    if (!isSupported) {
-      return <p>Push notifications are not supported in this browser.</p>
+    if (loading) {
+      return null;
     }
    
-    return (
-      <div>
-        <h3>Push Notifications</h3>
-        {subscription ? (
-          <>
-            <p>You are subscribed to push notifications.</p>
-            <button onClick={unsubscribeFromPush}>Unsubscribe</button>
-            <input
-              type="text"
-              placeholder="Enter notification message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            <button onClick={sendTestNotification}>Send Test</button>
-          </>
-        ) : (
-          <>
-            <p>You are not subscribed to push notifications.</p>
-            <button onClick={subscribeToPush}>Subscribe</button>
-          </>
-        )}
-      </div>
+    return ( 
+      <PushNotificationContext.Provider value={{ sendNotification}}>
+        {children}
+      </PushNotificationContext.Provider>
     )
   }
 
 export default PushNotificationManager;
+
