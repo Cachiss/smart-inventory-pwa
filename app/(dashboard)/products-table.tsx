@@ -44,9 +44,9 @@ export function ProductsTable({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Products</CardTitle>
+        <CardTitle>Productos</CardTitle>
         <CardDescription>
-          Manage your products and view their sales performance.
+          Maneje sus productos y vea su rendimiento de ventas.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -56,15 +56,15 @@ export function ProductsTable({
               <TableHead className="hidden w-[100px] sm:table-cell">
                 <span className="sr-only">Image</span>
               </TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="hidden md:table-cell">Price</TableHead>
+              <TableHead>Nombre</TableHead>
+              <TableHead>Estatus</TableHead>
+              <TableHead className="hidden md:table-cell">Precio</TableHead>
               <TableHead className="hidden md:table-cell">
-                Total Sales
+                Ventas totales
               </TableHead>
-              <TableHead className="hidden md:table-cell">Created at</TableHead>
+              <TableHead className="hidden md:table-cell">Fecha de creación</TableHead>
               <TableHead>
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">Acciones</span>
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -78,11 +78,11 @@ export function ProductsTable({
       <CardFooter>
         <form className="flex items-center w-full justify-between">
           <div className="text-xs text-muted-foreground">
-            Showing{' '}
+            Mostrando{' '}
             <strong>
               {Math.max(0, Math.min(offset - productsPerPage, totalProducts) + 1)}-{offset}
             </strong>{' '}
-            of <strong>{totalProducts}</strong> products
+            de <strong>{totalProducts}</strong> productos
           </div>
           <div className="flex">
             <Button
@@ -93,7 +93,7 @@ export function ProductsTable({
               disabled={offset === productsPerPage}
             >
               <ChevronLeft className="mr-2 h-4 w-4" />
-              Prev
+              Anterior
             </Button>
             <Button
               formAction={nextPage}
@@ -102,7 +102,7 @@ export function ProductsTable({
               type="submit"
               disabled={offset + productsPerPage > totalProducts}
             >
-              Next
+              Siguiente
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
