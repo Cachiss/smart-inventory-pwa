@@ -3,7 +3,7 @@
 import webpush from 'web-push';
  
 webpush.setVapidDetails(
-  'https://smart-inventory-pwa-git-main-cachiss-projects.vercel.app/',
+  'mailto:marcoscachis@gmail.com',
   process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
   process.env.VAPID_PRIVATE_KEY!
 );
@@ -24,16 +24,16 @@ export async function unsubscribeUser() {
   return { success: true };
 }
  
-export async function sendNotification(message : any) {
+export async function sendNotification(message : any, title = 'Test Notification') {
   if (!subscription) {
     throw new Error('No subscription available');
   }
- 
+  message = typeof message === 'string' ? message : 'Test Notification';
   try {
     await webpush.sendNotification(
       subscription,
       JSON.stringify({
-        title: 'Test Notification',
+        title: title,
         body: message,
         icon: '/icon.png',
       })
