@@ -1,5 +1,6 @@
 'use client'
 
+import { sendNotification } from 'app/actions'
 import React, { useState } from 'react'
 
 export default function CreateProductCard() {
@@ -41,7 +42,7 @@ export default function CreateProductCard() {
       setPrice('')
       setStock('')
       setAvailableAt('')
-
+      sendNotification('Producto creado exitosamente', 'Nuevo Producto') // Envia una notificación
     } catch (error) {
       console.error('Error creating product:', error)
     } finally {

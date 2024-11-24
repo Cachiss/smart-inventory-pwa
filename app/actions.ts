@@ -25,9 +25,6 @@ export async function unsubscribeUser() {
 }
  
 export async function sendNotification(message : any, title = 'Test Notification') {
-  if (!subscription) {
-    throw new Error('No subscription available');
-  }
   message = typeof message === 'string' ? message : 'Test Notification';
   try {
     await webpush.sendNotification(
@@ -38,6 +35,7 @@ export async function sendNotification(message : any, title = 'Test Notification
         icon: '/icon.png',
       })
     );
+    alert('Notification sent');
     return { success: true };
   } catch (error) {
     console.error('Error sending push notification:', error);
