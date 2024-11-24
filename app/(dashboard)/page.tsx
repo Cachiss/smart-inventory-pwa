@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ProductsTable } from './products-table';
 import { getProducts } from '@/lib/db';
 import Link from 'next/link';
+import { auth } from '@/lib/auth';
 
 export default async function ProductsPage(
   props: {
@@ -13,9 +14,13 @@ export default async function ProductsPage(
   const searchParams = await props.searchParams;
   const search = searchParams.q ?? '';
   const offset = searchParams.offset ?? 0;
+  let session = await auth();
+  let user = session?.user;
+
   const { products, newOffset, totalProducts } = await getProducts(
     search,
-    Number(offset)
+    Number(offset),
+    user!.email!
   ); 
   console.log('products', products);
   console.log('newOffset', newOffset);

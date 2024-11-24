@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   try {
     // Convierte el ReadableStream a JSON
     const data = await request.json();
-    const { imageUrl, name, status, price, stock, availableAt } = data;
+    const { imageUrl, name, status, price, stock, availableAt, userId } = data;
 
     // Validación de los campos requeridos
     if (!name || !status) {
@@ -36,7 +36,8 @@ export async function POST(request: Request) {
       status,
       price,
       stock,
-      availableAt: new Date(availableAt)
+      availableAt: new Date(availableAt),
+      userId,
     }])
 
     return new Response(JSON.stringify({ message: 'Product created successfully' }), {

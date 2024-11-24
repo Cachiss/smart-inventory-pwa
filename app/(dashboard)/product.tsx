@@ -17,7 +17,7 @@ export function Product({ product }: { product: SelectProduct }) {
   return (
     <TableRow>
       <TableCell className="hidden sm:table-cell">
-        <Image
+        <img
           alt="Product image"
           className="aspect-square rounded-md object-cover"
           height="64"
