@@ -31,6 +31,8 @@ import { VercelLogo } from '@/components/icons';
 import Providers from './providers';
 import { NavItem } from './nav-item';
 import { SearchInput } from './search';
+import PushNotificationManager from '@/components/pwa/PushNotificationsManager';
+import InstallPromptIos from '@/components/pwa/InstallPromptIos';
 
 export default function DashboardLayout({
   children
@@ -39,6 +41,8 @@ export default function DashboardLayout({
 }) {
   return (
     <Providers>
+      <PushNotificationManager />
+      <InstallPromptIos />
       <main className="flex min-h-screen w-full flex-col bg-muted/40">
         <DesktopNav />
         <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
