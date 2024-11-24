@@ -9,9 +9,9 @@ import {
   integer,
   timestamp,
   pgEnum,
-  serial
+  serial,
 } from 'drizzle-orm/pg-core';
-import { count, eq, ilike } from 'drizzle-orm';
+import { count, eq, ilike, and } from 'drizzle-orm';
 import { createInsertSchema } from 'drizzle-zod';
 
 export const db = drizzle(neon(process.env.POSTGRES_URL!));
@@ -25,7 +25,8 @@ export const products = pgTable('products', {
   status: statusEnum('status').notNull(),
   price: numeric('price', { precision: 10, scale: 2 }).notNull(),
   stock: integer('stock').notNull(),
-  availableAt: timestamp('available_at').notNull()
+  availableAt: timestamp('available_at').notNull(),
+  userId: text('userid').notNull(),
 });
 
 export type SelectProduct = typeof products.$inferSelect;
@@ -33,19 +34,19 @@ export const insertProductSchema = createInsertSchema(products);
 
 export async function getProducts(
   search: string,
-  offset: number
+  offset: number,
+  email: string
 ): Promise<{
   products: SelectProduct[];
   newOffset: number | null;
   totalProducts: number;
 }> {
-  // Always search the full table, not per page
   if (search) {
     return {
       products: await db
         .select()
         .from(products)
-        .where(ilike(products.name, `%${search}%`))
+        .where(and(eq(products.userId, email), ilike(products.name, `%${search}%`)))
         .limit(1000),
       newOffset: null,
       totalProducts: 0
