@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation'
 import {
   Home,
   LineChart,
@@ -34,12 +35,19 @@ import { NavItem } from './nav-item';
 import { SearchInput } from './search';
 import PushNotificationManager from '@/components/pwa/PushNotificationsManager';
 import InstallPromptIos from '@/components/pwa/InstallPromptIos';
+import { auth } from '@/lib/auth';
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
+  let session = await auth();
+
+  if (!session) {
+    return redirect('/login');
+  }
+
   return (
     <Providers>
       <PushNotificationManager>
