@@ -29,6 +29,14 @@ export const products = pgTable('products', {
   userId: text('userid').notNull(),
 });
 
+export const customers = pgTable('customers', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  address: text('address'),
+  phone: text('phone'),
+  sellerId: text('sellerid').notNull(),
+});
+
 export type SelectProduct = typeof products.$inferSelect;
 export const insertProductSchema = createInsertSchema(products);
 
@@ -84,4 +92,12 @@ export async function updateProductById(id: number, product: any) {
 
 export async function getProductById(id: number) {
   return await db.select().from(products).where(eq(products.id, id));
+}
+
+export async function getCustomers(email: string) {
+  return await db.select().from(customers).where(eq(customers.sellerId, email));
+}
+
+export async function insertCustomer(customer: any) {
+  await db.insert(customers).values([customer]);
 }
