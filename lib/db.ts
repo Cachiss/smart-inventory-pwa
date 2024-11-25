@@ -74,7 +74,7 @@ export async function getProducts(
   }
 
   let totalProducts = await db.select({ count: count() }).from(products);
-  let moreProducts = await db.select().from(products).limit(5).offset(offset);
+  let moreProducts = await db.select().from(products).offset(offset);
   let newOffset = moreProducts.length >= 5 ? offset + 5 : null;
 
   return {
