@@ -1,4 +1,5 @@
 'use client';
+import { usePushNotifications } from 'hooks/usePushNotificiations';
 import React, { useState } from 'react';
 
 interface ClientFormProps {
@@ -10,6 +11,8 @@ export function CustomerForm({ userId }: ClientFormProps) {
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const { sendNotification } = usePushNotifications();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +41,7 @@ export function CustomerForm({ userId }: ClientFormProps) {
         
       console.log('Customer creado exitosamente');
       // enviar a /customers
+      await sendNotification('Cliente creado exitosamente', 'El cliente ha sido creado exitosamente');
       window.location.href = '/customers';
     } catch (error) {
       console.error(error);
