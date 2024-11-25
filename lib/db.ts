@@ -37,6 +37,14 @@ export const customers = pgTable('customers', {
   sellerId: text('sellerid').notNull(),
 });
 
+export const sales = pgTable('sales', {
+  id: serial('id').primaryKey(),
+  productId: integer('product_id').notNull(),
+  customerId: integer('customer_id').notNull(),
+  user_id: text('user_id').notNull(),
+  quantity: integer('quantity')
+});
+
 export type SelectProduct = typeof products.$inferSelect;
 export const insertProductSchema = createInsertSchema(products);
 

@@ -7,7 +7,8 @@ import {
   PanelLeft,
   Settings,
   ShoppingCart,
-  Users2
+  Users2,
+  BadgeDollarSign
 } from 'lucide-react';
 
 import {
@@ -79,6 +80,9 @@ function DesktopNav() {
         </NavItem>
         <NavItem href="/customers" label="Clientes">
           <Users2 className="h-5 w-5" />
+        </NavItem>
+        <NavItem href="/sales" label="Ventas">
+          <BadgeDollarSign className="h-5 w-5" />
         </NavItem>
 
         <NavItem href="/analytics" label="Analiticas">
