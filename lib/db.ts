@@ -105,9 +105,31 @@ export async function getProductById(id: number) {
 export async function getCustomers(email: string) {
   // return customers, newOffset, totalCustomers
   return {
-    customers: await db.select().from(customers).limit(5),
+    customers: await db.select().from(customers),
     newOffset: null,
     totalCustomers: 0
+  };
+}
+
+
+export async function getSales(email: string) {
+  // Asumimos que tienes una relación entre las tablas sales, customers y products
+  const salesData = await db
+    .select({
+        id: sales.id,
+        quantity: sales.quantity,
+        customerId: customers.id,
+        productId: products.id,
+        customerName: customers.name,
+        productName: products.name
+    })
+    .from(sales)
+    .leftJoin(customers, eq(sales.customerId, customers.id)) // Unión con la tabla customers
+    .leftJoin(products, eq(sales.productId, products.id)) // Unión con la tabla products
+  return {
+    sales: salesData,
+    newOffset: null,
+    totalSales: salesData.length
   };
 }
 
