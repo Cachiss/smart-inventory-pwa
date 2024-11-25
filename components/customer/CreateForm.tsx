@@ -37,6 +37,8 @@ export function CustomerForm({ userId }: ClientFormProps) {
         setPhone('');
         
       console.log('Customer creado exitosamente');
+      // enviar a /customers
+      window.location.href = '/customers';
     } catch (error) {
       console.error(error);
     } finally {

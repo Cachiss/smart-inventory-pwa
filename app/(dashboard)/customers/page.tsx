@@ -2,9 +2,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { File, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ProductsTable } from '../products-table';
-import { getProducts } from '@/lib/db';
+import { getCustomers, getProducts } from '@/lib/db';
 import Link from 'next/link';
 import { auth } from '@/lib/auth';
+import { CustomersTable } from '../customers-table';
 
 export default async function ProductsPage(
   props: {
@@ -13,53 +14,36 @@ export default async function ProductsPage(
 ) {
   const searchParams = await props.searchParams;
   const search = searchParams.q ?? '';
-  const offset = 50;
+  const offset = searchParams.offset ?? 0;
   let session = await auth();
   let user = session?.user;
 
-  const { products, newOffset, totalProducts } = await getProducts(
-    search,
-    Number(offset),
+  const { customers, newOffset, totalCustomers } = await getCustomers(
     user!.email!
   ); 
-  console.log('products', products);
-  console.log('newOffset', newOffset);
-  console.log('totalProducts', totalProducts);
+  console.log('customers', customers);
 
   return (
-    <>
+    <Tabs defaultValue="all">
       <div className="flex items-center">
-        <TabsList>
-          <TabsTrigger value="all">Todos</TabsTrigger>
-          <TabsTrigger value="active">Activos</TabsTrigger>
-          <TabsTrigger value="archived" className="hidden sm:flex">
-            Archivados
-          </TabsTrigger>
-        </TabsList>
         <div className="ml-auto flex items-center gap-2">
-          <Button size="sm" variant="outline" className="h-8 gap-1">
-            <File className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Exportar
-            </span>
-          </Button>
-          <Link href="/products/create">
+          <Link href="/customers/create">
             <Button size="sm" className="h-8 gap-1">
               <PlusCircle className="h-3.5 w-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Agregar producto
+                Agregar Cliente
               </span>
             </Button>
           </Link>
         </div>
       </div>
-      <div >
-        <ProductsTable
-          products={products}
+      <TabsContent value="all">
+        <CustomersTable
+          customers={customers}
           offset={newOffset ?? 0}
-          totalProducts={totalProducts}
+          totalCustomers={totalCustomers}
         />
-      </div>
-    </>
+      </TabsContent>
+    </Tabs>
   );
 }

@@ -95,7 +95,12 @@ export async function getProductById(id: number) {
 }
 
 export async function getCustomers(email: string) {
-  return await db.select().from(customers).where(eq(customers.sellerId, email));
+  // return customers, newOffset, totalCustomers
+  return {
+    customers: await db.select().from(customers).limit(5),
+    newOffset: null,
+    totalCustomers: 0
+  };
 }
 
 export async function insertCustomer(customer: any) {
