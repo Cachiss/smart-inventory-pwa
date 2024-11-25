@@ -1,4 +1,5 @@
 'use client';
+import { usePushNotifications } from 'hooks/usePushNotificiations';
 import React, { useState } from 'react';
 
 interface ClientFormProps {
@@ -13,6 +14,7 @@ export function ClientForm({ userId }: ClientFormProps) {
   const [stock, setStock] = useState('');
   const [availableAt, setAvailableAt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { sendNotification } = usePushNotifications();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +47,7 @@ export function ClientForm({ userId }: ClientFormProps) {
       setStock('');
       setAvailableAt('');
       console.log('Producto creado exitosamente');
+      await sendNotification('Producto creado exitosamente', 'Producto creado exitosamente');
     } catch (error) {
       console.error(error);
     } finally {

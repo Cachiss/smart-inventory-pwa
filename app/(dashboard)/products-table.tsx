@@ -60,7 +60,7 @@ export function ProductsTable({
               <TableHead>Estatus</TableHead>
               <TableHead className="hidden md:table-cell">Precio</TableHead>
               <TableHead className="hidden md:table-cell">
-                Ventas totales
+                Stock disponible
               </TableHead>
               <TableHead className="hidden md:table-cell">Fecha de creación</TableHead>
               <TableHead>
@@ -78,34 +78,9 @@ export function ProductsTable({
       <CardFooter>
         <form className="flex items-center w-full justify-between">
           <div className="text-xs text-muted-foreground">
-            Mostrando{' '}
-            <strong>
-              {Math.max(0, Math.min(offset - productsPerPage, totalProducts) + 1)}-{offset}
-            </strong>{' '}
-            de <strong>{totalProducts}</strong> productos
+            <strong>{totalProducts}</strong> productos totales
           </div>
-          <div className="flex">
-            <Button
-              formAction={prevPage}
-              variant="ghost"
-              size="sm"
-              type="submit"
-              disabled={offset === productsPerPage}
-            >
-              <ChevronLeft className="mr-2 h-4 w-4" />
-              Anterior
-            </Button>
-            <Button
-              formAction={nextPage}
-              variant="ghost"
-              size="sm"
-              type="submit"
-              disabled={offset + productsPerPage > totalProducts}
-            >
-              Siguiente
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
+
         </form>
       </CardFooter>
     </Card>

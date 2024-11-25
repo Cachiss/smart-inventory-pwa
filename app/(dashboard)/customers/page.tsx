@@ -1,34 +1,65 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { File, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
-import { PlusCircle } from 'lucide-react';
+import { ProductsTable } from '../products-table';
+import { getProducts } from '@/lib/db';
 import Link from 'next/link';
+import { auth } from '@/lib/auth';
 
-export default function CustomersPage() {
+export default async function ProductsPage(
+  props: {
+    searchParams: Promise<{ q: string; offset: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const search = searchParams.q ?? '';
+  const offset = 50;
+  let session = await auth();
+  let user = session?.user;
+
+  const { products, newOffset, totalProducts } = await getProducts(
+    search,
+    Number(offset),
+    user!.email!
+  ); 
+  console.log('products', products);
+  console.log('newOffset', newOffset);
+  console.log('totalProducts', totalProducts);
+
   return (
     <>
-      <div>
-        <Link href="/customers/create">
-          <Button size="sm" className="h-8 gap-1">
-            <PlusCircle className="h-3.5 w-3.5" />
+      <div className="flex items-center">
+        <TabsList>
+          <TabsTrigger value="all">Todos</TabsTrigger>
+          <TabsTrigger value="active">Activos</TabsTrigger>
+          <TabsTrigger value="archived" className="hidden sm:flex">
+            Archivados
+          </TabsTrigger>
+        </TabsList>
+        <div className="ml-auto flex items-center gap-2">
+          <Button size="sm" variant="outline" className="h-8 gap-1">
+            <File className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Agregar Cliente
+              Exportar
             </span>
           </Button>
-        </Link>
+          <Link href="/products/create">
+            <Button size="sm" className="h-8 gap-1">
+              <PlusCircle className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Agregar producto
+              </span>
+            </Button>
+          </Link>
+        </div>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Clientes</CardTitle>
-          <CardDescription>Vea todos los clientes y sus ordenes.</CardDescription>
-        </CardHeader>
-        <CardContent></CardContent>
-      </Card>
+      <div >
+        <ProductsTable
+          products={products}
+          offset={newOffset ?? 0}
+          totalProducts={totalProducts}
+        />
+      </div>
     </>
   );
 }
