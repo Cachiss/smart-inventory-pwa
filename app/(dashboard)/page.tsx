@@ -17,10 +17,12 @@ export default async function ProductsPage(
   let session = await auth();
   let user = session?.user;
 
+  console.log('user', user);
+
   const { products, newOffset, totalProducts } = await getProducts(
     search,
     Number(offset),
-    user!.email!
+    user?.email!
   ); 
   console.log('products', products);
   console.log('newOffset', newOffset);
